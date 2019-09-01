@@ -1,3 +1,4 @@
+let sc3_mods = {};
 class sc3_mod {
 	/**
 	 * @param {string} id
@@ -13,9 +14,7 @@ class sc3_mod {
 		this.buttonless = buttonless;
 
 
-		if (this.buttonless) {
-			this.func(); // run mod immediately
-		} else {
+		if (!this.buttonless) {
 			// create button
 			let mods_div = document.getElementById("sc3_mods");
 			let button = document.createElement("button");
@@ -27,6 +26,8 @@ class sc3_mod {
 
 			mods_div.appendChild(button);
 		}
+
+		sc3_mods[id] = this;
 	}
 
 	static init() {

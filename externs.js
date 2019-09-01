@@ -1,7 +1,15 @@
 /** @nocompile */
 // mega hack alert
 
-
+/**
+ * @nocollapse
+ * @noinline
+ * @noalias
+ *
+ * @param {string} text
+ * @param {boolean} someparamidk
+ */
+function createTextDialog(text, someparamidk) {}
 /**
  * @nocollapse
  * @noinline

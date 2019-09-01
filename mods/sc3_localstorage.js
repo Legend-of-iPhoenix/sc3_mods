@@ -33,34 +33,11 @@ new sc3_mod("local_load", "Load Local Project", () => {
       icon: "/sc/img/64x64_error.png",
       content: "No local save was found."
     });
+
+    return;
   }
 
-
-  // we store them as normal objects in JSON notation, but the rest of the code expects
-  // the files to be sc3_file objects, convert them and assign the properties.
-  let length = proj.files.length;
-  for (let i = 0; i < length; i++) {
-    /** @type {Object|null} */
-    let file = data.files[i];
-
-    if (file) {
-      // args required by constructor because, uhh, ???
-      // not my code :V
-      let newfile = new sc3_file(file.type, file.subType);
-
-      Object.assign(newfile, file);
-
-      data.files[i] = newfile;
-    } else {
-      delete data.files[i];
-    }
+  if (sc3_mods["parse_text"].func(data)) {
+    setEdMsgOK("Loaded local copy of project successfully.");
   }
-
-  // same here, we have a normal object, code expects a sc3_proj object.
-  proj = new sc3_proj();
-  Object.assign(proj, data); // copy the properties over
-
-  // display the page
-  proj.loadToPage(proj.projectCurIdx);
-  proj.refreshProjectPane();
 });

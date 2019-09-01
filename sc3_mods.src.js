@@ -1,3 +1,4 @@
+let sc3_mods = {};
 class sc3_mod {
 	/**
 	 * @param {string} id
@@ -13,9 +14,7 @@ class sc3_mod {
 		this.buttonless = buttonless;
 
 
-		if (this.buttonless) {
-			this.func(); // run mod immediately
-		} else {
+		if (!this.buttonless) {
 			// create button
 			let mods_div = document.getElementById("sc3_mods");
 			let button = document.createElement("button");
@@ -27,6 +26,8 @@ class sc3_mod {
 
 			mods_div.appendChild(button);
 		}
+
+		sc3_mods[id] = this;
 	}
 
 	static init() {
@@ -94,27 +95,48 @@ new sc3_mod("local_load", "Load Local Project", () => {
       icon: "/sc/img/64x64_error.png",
       content: "No local save was found."
     });
+
+    return;
   }
 
+  if (sc3_mods["parse_text"].func(data)) {
+    setEdMsgOK("Loaded local copy of project successfully.");
+  }
+});new sc3_mod("export_text", "Export Project as Text", () => {
+  createTextDialog(JSON.stringify(proj), true);
+});
 
-  // we store them as normal objects in JSON notation, but the rest of the code expects
+new sc3_mod("parse_text", "Text Parser", (data) => {
+  // we store files as normal objects in JSON notation, but the rest of the code expects
   // the files to be sc3_file objects, convert them and assign the properties.
-  let length = proj.files.length;
-  for (let i = 0; i < length; i++) {
-    /** @type {Object|null} */
-    let file = data.files[i];
+  try {
+    let length = proj.files.length;
+    for (let i = 0; i < length; i++) {
+      /** @type {Object|null} */
+      let file = data.files[i];
 
-    if (file) {
-      // args required by constructor because, uhh, ???
-      // not my code :V
-      let newfile = new sc3_file(file.type, file.subType);
+      if (file) {
+        // args required by constructor because, uhh, ???
+        // not my code :V
+        let newfile = new sc3_file(file.type, file.subType);
 
-      Object.assign(newfile, file);
+        Object.assign(newfile, file);
 
-      data.files[i] = newfile;
-    } else {
-      delete data.files[i];
+        data.files[i] = newfile;
+      } else {
+        delete data.files[i];
+      }
     }
+  } catch (e) {
+    console.error(e);
+    $.msgBox({
+      type: "error",
+      icon: "/sc/img/64x64_error.png",
+      title: "Failed to load project from text",
+      content: "The data was formatted improperly."
+    });
+
+    return false;
   }
 
   // same here, we have a normal object, code expects a sc3_proj object.
@@ -124,4 +146,28 @@ new sc3_mod("local_load", "Load Local Project", () => {
   // display the page
   proj.loadToPage(proj.projectCurIdx);
   proj.refreshProjectPane();
+
+  return true;
+}, true /* buttonless/internal */ );
+
+new sc3_mod("load_text", "Import Project from Text", () => {
+  /* If you haven't noticed, I'm quite lazy */
+  let data = prompt("Paste the text here. \n THIS WILL OVERWRITE YOUR CURRENT PROJECT");
+
+  if (data == null) {
+    $.msgBox({
+      type: "error",
+      icon: "/sc/img/64x64_error.png",
+      title: "No text inputted.",
+      content: ""
+    });
+
+    return;
+  }
+
+  data = JSON.parse(data);
+
+  if (sc3_mods["parse_text"].func(data)) {
+    setEdMsgOK("Loaded project from text successfully!");
+  }
 });
