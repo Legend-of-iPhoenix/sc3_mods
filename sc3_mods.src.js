@@ -88,6 +88,10 @@ new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
   let pcp = document.querySelector("#page_content_parent");
   pcp.style.width = toggle ? "" : "100%";
   pcp.style.overflow = toggle ? "" : "initial";
+
+  let cw = document.querySelector("#content_wrapper");
+  cw.style.maxWidth = toggle ? "80rem" : "";
+  
 }, sc3_mod_types.BUTTON_TOGGLE);
 new sc3_mod("local_save", "Save Project Locally", () => {
   // just in case, though this should never throw an error under normal use.
