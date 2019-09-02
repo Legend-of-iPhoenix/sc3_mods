@@ -1,27 +1,47 @@
 let sc3_mods = {};
+
+/**
+ * @enum {number}
+ * Even types have a button, odd ones do not.
+ */
+let sc3_mod_types = {
+	BUTTON: 0,
+	INTERNAL: 1,
+	BUTTON_TOGGLE: 2
+}
 class sc3_mod {
 	/**
 	 * @param {string} id
 	 * @param {string} name
 	 * @param {Function} func
-	 * @param {?boolean=} buttonless
+	 * @param {sc3_mod_types=} type
 	 */
-	constructor(id, name, func, buttonless) {
+	constructor(id, name, func, type) {
 		console.log("Loaded Mod \"" + name + "\"");
+		type = type || sc3_mod_types.BUTTON;
 		this.name = name;
 		this.func = func;
 
-		this.buttonless = buttonless;
+		this.type = type;
 
 
-		if (!this.buttonless) {
+		if (!(type % 2)) {
 			// create button
 			let mods_div = document.getElementById("sc3_mods");
 			let button = document.createElement("button");
 
 			button.classList.add("sc3_interface_button");
 
-			button.onclick = this.func;
+			if (type == sc3_mod_types.BUTTON_TOGGLE) {
+				this.toggle = false;
+				button.onclick = () => {
+					this.func(this.toggle);
+					this.toggle = !this.toggle;
+				};
+			} else {
+				button.onclick = this.func;
+			}
+			
 			button.innerText = name;
 
 			mods_div.appendChild(button);
@@ -42,8 +62,18 @@ class sc3_mod {
 }
 
 sc3_mod.init();
-let sc3mod_isFullscreen = false;
-new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", () => {
+let tokenize_result = document.getElementById("tokenize_result");
+tokenize_result.style.boxSizing = "border-box";
+tokenize_result.style.margin = "0";
+let wrapper = document.createElement("div");
+wrapper.style.padding = "4px";
+tokenize_result.parentNode.insertBefore(wrapper, tokenize_result);
+wrapper.appendChild(tokenize_result);
+
+new sc3_mod("autosave_shifting_disable", "Toggle Autosave Shifting", (toggle) => {
+	wrapper.style.minHeight = toggle ? "" : "37px";
+}, sc3_mod_types.BUTTON_TOGGLE);
+new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
   [
     "#user_tools_parent",
     "#sidebar_parent",
@@ -52,15 +82,14 @@ new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", () => {
     "#sc3_columns>.jstified_edge2",
     "#sc3_columns>.jstified_shutter"
   ].map(selector => {
-    document.querySelector(selector).style.display = sc3mod_isFullscreen ? "" : "none";
+    document.querySelector(selector).style.display = toggle ? "" : "none";
   });
 
   let pcp = document.querySelector("#page_content_parent");
-  pcp.style.width = sc3mod_isFullscreen ? "" : "100%";
-  pcp.style.overflow = sc3mod_isFullscreen ? "" : "initial";
-
-  sc3mod_isFullscreen = !sc3mod_isFullscreen;
-});new sc3_mod("local_save", "Save Project Locally", () => {
+  pcp.style.width = toggle ? "" : "100%";
+  pcp.style.overflow = toggle ? "" : "initial";
+}, sc3_mod_types.BUTTON_TOGGLE);
+new sc3_mod("local_save", "Save Project Locally", () => {
   // just in case, though this should never throw an error under normal use.
   try {
     localStorage.setItem("proj", JSON.stringify(proj));
@@ -102,7 +131,8 @@ new sc3_mod("local_load", "Load Local Project", () => {
   if (sc3_mods["parse_text"].func(data)) {
     setEdMsgOK("Loaded local copy of project successfully.");
   }
-});new sc3_mod("export_text", "Export Project as Text", () => {
+});
+new sc3_mod("export_text", "Export Project as Text", () => {
   createTextDialog(JSON.stringify(proj), true);
 });
 
@@ -148,7 +178,7 @@ new sc3_mod("parse_text", "Text Parser", (data) => {
   proj.refreshProjectPane();
 
   return true;
-}, true /* buttonless/internal */ );
+}, sc3_mod_types.INTERNAL);
 
 new sc3_mod("load_text", "Import Project from Text", () => {
   /* If you haven't noticed, I'm quite lazy */

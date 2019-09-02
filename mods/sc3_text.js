@@ -44,7 +44,7 @@ new sc3_mod("parse_text", "Text Parser", (data) => {
   proj.refreshProjectPane();
 
   return true;
-}, true /* buttonless/internal */ );
+}, sc3_mod_types.INTERNAL);
 
 new sc3_mod("load_text", "Import Project from Text", () => {
   /* If you haven't noticed, I'm quite lazy */

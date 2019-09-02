@@ -1,5 +1,4 @@
-let sc3mod_isFullscreen = false;
-new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", () => {
+new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
   [
     "#user_tools_parent",
     "#sidebar_parent",
@@ -8,12 +7,10 @@ new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", () => {
     "#sc3_columns>.jstified_edge2",
     "#sc3_columns>.jstified_shutter"
   ].map(selector => {
-    document.querySelector(selector).style.display = sc3mod_isFullscreen ? "" : "none";
+    document.querySelector(selector).style.display = toggle ? "" : "none";
   });
 
   let pcp = document.querySelector("#page_content_parent");
-  pcp.style.width = sc3mod_isFullscreen ? "" : "100%";
-  pcp.style.overflow = sc3mod_isFullscreen ? "" : "initial";
-
-  sc3mod_isFullscreen = !sc3mod_isFullscreen;
-});
+  pcp.style.width = toggle ? "" : "100%";
+  pcp.style.overflow = toggle ? "" : "initial";
+}, sc3_mod_types.BUTTON_TOGGLE);
