@@ -10,6 +10,23 @@
  * @param {boolean} someparamidk
  */
 function createTextDialog(text, someparamidk) {}
+
+/**
+ * @nocollapse
+ * @noinline
+ * @noalias
+ */
+let myCodeMirror = {};
+
+/**
+ * @nocollapse
+ * @noinline
+ * @noalias
+ *
+ * @param {string} option
+ * @param {string} value
+ */
+myCodeMirror.setOption = function(option, value) {};
 /**
  * @nocollapse
  * @noinline

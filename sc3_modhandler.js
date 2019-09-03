@@ -7,7 +7,8 @@ let sc3_mods = {};
 let sc3_mod_types = {
 	BUTTON: 0,
 	INTERNAL: 1,
-	BUTTON_TOGGLE: 2
+	BUTTON_TOGGLE: 2,
+	SELECT: 3
 }
 class sc3_mod {
 	/**
