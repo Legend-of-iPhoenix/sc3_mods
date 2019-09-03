@@ -73,7 +73,59 @@ wrapper.appendChild(tokenize_result);
 new sc3_mod("autosave_shifting_disable", "Toggle Autosave Shifting", (toggle) => {
 	wrapper.style.minHeight = toggle ? "" : "37px";
 }, sc3_mod_types.BUTTON_TOGGLE);
-new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
+new sc3_mod("format_basic", "Format TI-BASIC", (lines) => {
+	const INDENTATION = "  ";
+	let depth = 0;
+
+	return lines.map(line => {
+		line = line.trimStart();
+
+		if (line.startsWith("End") || line.startsWith("Else")) {
+			depth--;
+		}
+
+		let indented = line;
+		if (depth) {
+			indented = INDENTATION.repeat(depth) + line;
+		}
+
+		if (line.startsWith("Then") 
+			|| line.startsWith("While")
+			|| line.startsWith("Repeat")
+			|| line.startsWith("For(") 
+			|| line.startsWith("Else")) {
+			depth++;
+		}
+
+		return indented;
+	});
+}, sc3_mod_types.INTERNAL);
+
+new sc3_mod("format", "Format Code", () => {
+	let file = proj.files[proj.projectCurIdx];
+
+	let currentType = file.subType;
+
+	let lines = file.data.split("\n");
+
+	switch (currentType) {
+		// basic subtypes
+		case "84+CSE": // gosh darn it, why are these so weird
+		case "Tokens":
+			file.data = sc3_mods["format_basic"].func(lines).join("\n");
+
+			proj.loadToPage(proj.projectCurIdx);
+  		proj.refreshProjectPane();
+			break;
+		default:
+			$.msgBox({
+	      type: "error",
+	      icon: "/sc/img/64x64_error.png",
+	      title: "Current file type not supported",
+	      content: "Currently, I only support formatting TI-BASIC programs."
+	    });
+	}
+});new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
   [
     "#user_tools_parent",
     "#sidebar_parent",
@@ -91,7 +143,6 @@ new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
 
   let cw = document.querySelector("#content_wrapper");
   cw.style.maxWidth = toggle ? "80rem" : "";
-  
 }, sc3_mod_types.BUTTON_TOGGLE);
 new sc3_mod("local_save", "Save Project Locally", () => {
   // just in case, though this should never throw an error under normal use.

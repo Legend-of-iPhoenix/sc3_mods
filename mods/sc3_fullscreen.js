@@ -16,5 +16,4 @@ new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
 
   let cw = document.querySelector("#content_wrapper");
   cw.style.maxWidth = toggle ? "80rem" : "";
-  
 }, sc3_mod_types.BUTTON_TOGGLE);
