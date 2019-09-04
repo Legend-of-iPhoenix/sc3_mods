@@ -74,7 +74,7 @@ wrapper.appendChild(tokenize_result);
 new sc3_mod("autosave_shifting_disable", "Toggle Autosave Shifting", (toggle) => {
 	wrapper.style.minHeight = toggle ? "" : "37px";
 }, sc3_mod_types.BUTTON_TOGGLE);
-new sc3_mod("format_basic", "Format TI-BASIC", (lines) => {
+new sc3_mod("format_basic_ice", "Format TI-BASIC and ICE", (lines, type) => {
   const INDENTATION = "  ";
   let depth = 0;
 
@@ -90,6 +90,9 @@ new sc3_mod("format_basic", "Format TI-BASIC", (lines) => {
       indented = INDENTATION.repeat(depth) + line;
     }
 
+    if (type == "ICETokens" && line.startsWith("If")) {
+    	depth++;
+    }
     if (line.startsWith("Then") ||
       line.startsWith("While") ||
       line.startsWith("Repeat") ||
@@ -110,10 +113,11 @@ new sc3_mod("format", "Format Code", () => {
   let lines = file.data.split("\n");
 
   switch (currentType) {
-    // basic subtypes
+    // basic & ice subtypes
   case "84+CSE": // gosh darn it, why are these so weird
   case "Tokens":
-    file.data = sc3_mods["format_basic"].func(lines).join("\n");
+  case "ICETokens":
+    file.data = sc3_mods["format_basic_ice"].func(lines, currentType).join("\n");
 
     proj.loadToPage(proj.projectCurIdx);
     proj.refreshProjectPane();
@@ -123,7 +127,7 @@ new sc3_mod("format", "Format Code", () => {
       type: "error",
       icon: "/sc/img/64x64_error.png",
       title: "Current file type not supported",
-      content: "Currently, I only support formatting TI-BASIC programs."
+      content: "Currently, I only support formatting TI-BASIC and ICE programs."
     });
   }
 });new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
