@@ -1,129 +1,87 @@
-/** @nocompile */
-// mega hack alert
+/** @nocompile @extern */
 
 /**
- * @nocollapse
- * @noinline
- * @noalias
- *
  * @param {string} text
  * @param {boolean} someparamidk
  */
 function createTextDialog(text, someparamidk) {}
 
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
 let myCodeMirror = {};
 
 /**
- * @nocollapse
- * @noinline
- * @noalias
- *
  * @param {string} option
  * @param {string} value
  */
-myCodeMirror.setOption = function(option, value) {};
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
-let $ = {};
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
-$.msgBox = function (msgdata) {};
+myCodeMirror["setOption"] = function(option, value) {};
 
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
+let $ = {};
+
+$["msgBox"] = function (msgdata) {};
+
 let proj = {};
 
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
 let localStorage = {
-  setItem: function (item, value) {},
-  getItem: /* @return {string} */ function (item) {}
+  "setItem": function (item, value) {},
+  "getItem": /* @return {string} */ function (item) {}
 };
 
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
 class sc3_file {
   /**
    * @param {string} type
    * @param {string} subType
    */
   constructor(type, subType) {
-    this.type = type;
-    this.subType = subType;
+    this["type"] = type;
+    this["subType"] = subType;
   }
 }
 
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
 class sc3_proj {
   constructor() {
     /** @type {Array<Object>} */
-    this.files = [];
+    this["files"] = [];
 
     /** @type {boolean} */
-    this.projectNew = false;
+    this["projectNew"] = false;
 
     /** @type {boolean} */
-    this.projectOpen = false;
+    this["projectOpen"] = false;
 
     /** @type {boolean} */
-    this.projectSaved = false;
+    this["projectSaved"] = false;
 
     /** @type {boolean} */
-    this.projectSaveIncremental = false;
+    this["projectSaveIncremental"] = false;
 
     /** @type {number} */
-    this.projectID = 0;
+    this["projectID"] = 0;
 
     /** @type {boolean} */
-    this.projectShared = false;
+    this["projectShared"] = false;
 
     /** @type {boolean} */
-    this.projectFromFile = false;
+    this["projectFromFile"] = false;
 
     /** @type {boolean} */
-    this.projectFromSaved = false;
+    this["projectFromSaved"] = false;
 
     /** @type {string} */
-    this.projectType = "";
+    this["projectType"] = "";
 
     /** @type {number} */
-    this.projectCurIdx = 0;
+    this["projectCurIdx"] = 0;
 
     /** @type {number} */
-    this.projectOldIdx = 0;
+    this["projectOldIdx"] = 0;
 
     /** @type {string} */
-    this.projectName = "";
+    this["projectName"] = "";
 
     /** @type {number} */
-    this.autoSaveTimer = 0;
+    this["autoSaveTimer"] = 0;
 
     /** @type {string} */
-    this.projectSubtype = "";
+    this["projectSubtype"] = "";
   }
 
   reset() {}
@@ -157,30 +115,15 @@ class sc3_proj {
   validNumStr() {}
 }
 
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
 function setEdMsgBad(message) {}
 
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
 function setEdMsgOK(message) {}
 
-/**
- * @nocollapse
- * @noinline
- * @noalias
- */
 let sc3_settings = {
-  arghint: true,
-  syncolor: true,
-  spriteedit: true,
-  indent: true,
-  indent_width: 4,
-  indent_type: "tabs"
+  "arghint": true,
+  "syncolor": true,
+  "spriteedit": true,
+  "indent": true,
+  "indent_width": 4,
+  "indent_type": "tabs"
 };
