@@ -170,3 +170,17 @@ function setEdMsgBad(message) {}
  * @noalias
  */
 function setEdMsgOK(message) {}
+
+/**
+ * @nocollapse
+ * @noinline
+ * @noalias
+ */
+let sc3_settings = {
+  arghint: true,
+  syncolor: true,
+  spriteedit: true,
+  indent: true,
+  indent_width: 4,
+  indent_type: "tabs"
+};
