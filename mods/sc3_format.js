@@ -1,5 +1,5 @@
 new sc3_mod("format_basic_ice", "Format TI-BASIC and ICE", (lines, type) => {
-  const INDENTATION = "  ";
+  const INDENTATION = sc3_settings["indent_type"] == "spaces" ? " ".repeat(sc3_settings["indent_width"]) : "\t";
   let depth = 0;
 
   return lines.map(line => {
