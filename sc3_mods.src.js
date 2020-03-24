@@ -75,7 +75,7 @@ new sc3_mod("autosave_shifting_disable", "Toggle Autosave Shifting", (toggle) =>
 	wrapper.style.minHeight = toggle ? "" : "37px";
 }, sc3_mod_types.BUTTON_TOGGLE);
 new sc3_mod("format_basic_ice", "Format TI-BASIC and ICE", (lines, type) => {
-  const INDENTATION = "  ";
+  const INDENTATION = sc3_settings["indent_type"] == "spaces" ? " ".repeat(sc3_settings["indent_width"]) : "\t";
   let depth = 0;
 
   return lines.map(line => {
@@ -130,7 +130,8 @@ new sc3_mod("format", "Format Code", () => {
       content: "Currently, I only support formatting TI-BASIC and ICE programs."
     });
   }
-});new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
+});
+new sc3_mod("fullscreen_toggle", "Toggle Fullscreen", (toggle) => {
   [
     "#user_tools_parent",
     "#sidebar_parent",
